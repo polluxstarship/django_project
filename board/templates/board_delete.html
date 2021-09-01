@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mt-5">
+  <div class="col-12 text-center">
+    <h1>
+        기록되지 않은 것은 기억되지 않는다. 사람이 언제 죽는지 아는가?
+    </h1>
+    <h3>
+        -토니토니 쵸파-
+    </h3>
+  </div>
+</div>
+
+<div class="row mt-5">
+  <div class="col-12">
+    <button
+      type="submit"
+      class="btn btn-primary btn-lg btn-block"
+    >
+      DELETE
+    </button>
+  </div>
+</div>
+<div class="row mt-2">
+  <div class="col-12">
+    <button type="button" class="btn btn-secondary btn-lg btn-block" onclick="location.href='/board/list/'">
+      GO BACK TO LIST
+    </button>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

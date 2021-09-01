@@ -18,4 +18,25 @@
     <button class="btn btn-primary" onclick="location.href='/board/list/'">돌아가기</button>
   </div>
 </div>
+{% if request.session.user == board.writer_id %}
+<div class="row mt-5">
+  <div class="col-12">
+    <button type="button" class="btn btn-info btn-lg btn-block" onclick="location.href='/board/edit/{{board.id}}/'">
+      edit
+    </button>
+  </div>
+</div>
+<div class="row mt-2">
+  <div class="col-12">
+    <button
+      type="button"
+      class="btn btn-primary btn-lg btn-block"
+      onclick="location.href='/board/delete/{{board.id}}/'"
+    >
+      delete
+    </button>
+  </div>
+</div>
+
+{% endif %}
 {% endblock %}

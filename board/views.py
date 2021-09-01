@@ -1,8 +1,8 @@
 from django.http import Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from member.models import BoardMember
 from .models import Board
-from .forms import BoardForm
+from .forms import *
 from django.core.paginator import Paginator
 # Create your views here.
 
@@ -28,7 +28,6 @@ def board_write(request):
         if form.is_valid():
             user_id         = request.session.get('user')
             member          = BoardMember.objects.get(pk=user_id)
-
             board = Board()
             board.title     = form.cleaned_data['title']
             board.contents  = form.cleaned_data['contents']
@@ -44,10 +43,38 @@ def board_write(request):
 def board_detail(request, pk):
         try:
             board = Board.objects.get(pk=pk)
+            print(board.writer_id)
+            print(request.session.get('user'))
         except Board.DoesNotExist:
             raise Http404('게시글을 찾을 수 없습니다')
             # 게시물의 내용을 찾을 수 없을 때 내는 오류 message.
 
         return render(request, 'board_detail.html', {'board': board})
 
+def board_edit(request, pk):
+    board = Board.objects.get(pk=pk)
+    if request.session.get('user') != board.writer_id:
+        return redirect('/')
+    # 세션에 'user' 키를 불러올 수 없으면, 로그인하지 않은 사용자이므로 로그인 페이지로 리다이렉트 한다.
+    if request.method == "POST":
+        form = EditForm(request.POST)
+        if form.is_valid():
+            user_id         = request.session.get('user')
+            member          = BoardMember.objects.get(pk=user_id)
+            board.title     = form.cleaned_data['title']
+            board.contents  = form.cleaned_data['contents']
+            board.writer    = member
+            board.save()
+            return redirect('/board/list/')
+    else:
+        form = EditForm()
+    return render(request, 'board_edit.html', {'board': board, 'form':form})
 
+def board_delete(request, pk):
+    board = get_object_or_404(Board, pk=pk)
+    if request.session.get('user') != board.writer_id:
+        return redirect('/')
+    if request.method == 'POST':
+        board.delete()
+        return redirect("/board/list/")
+    return render(request, 'board_delete.html', {'board': board})
