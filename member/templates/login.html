@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+crossorigin="anonymous" -->
+
+
+<div class="container>
+  <div class="row mt-5">
+    <div class="col-5 text-center">
+        {{ error }}
+      <h3>Signin Page</h3>
+    </div>
+  </div>
+</div>
+
+<div class="container>
+  <div class="row mt-5">
+    <div class="col-5 text-center">
+       <form method="POST" action="."> {% csrf_token %}
+          <div class="form-group">
+              {% for field in form %}
+              <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                <input
+                  type="{{ field.field.widget.input_type }}"
+                  class="form-control"
+                  id="{{ field.id_for_label }}"
+                  placeholder="{{ field.label }}"
+                  name="{{ field.name }}"
+                />
+              </div>
+              {% if field.errors %}
+              <span style="color: red;">{{ field.errors }}</span>
+              {% endif %}
+              {% endfor %}
+          </div>
+           <button type="submit" class="btn btn-primary" >Login</button>
+        </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
